@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; worker-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="description" content="wAIter — interactive demo. A coordination panel for restaurants. Persona-scoped, AI-managed.">
+  <title>wAIter — demo · Stagione, Surry Hills</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext x='3' y='19' font-family='Georgia,serif' font-weight='800' font-size='20' fill='%230B0D0E'%3Ew%3Ctspan fill='%23E8A33D'%3EAI%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+  <style>
+    /* Demo-specific layout (consumes /assets/styles.css for tokens + atoms). */
+    .demo-banner { position: sticky; top: 0; z-index: 60; }
+    body { padding-top: 0; }
+
+    /* Top bar (override of .site-header for the demo) */
+    .demo-bar {
+      position: sticky; top: 30px; z-index: 50;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: saturate(140%) blur(10px);
+      -webkit-backdrop-filter: saturate(140%) blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-bar .wrap-wide {
+      display: flex; align-items: center; gap: var(--space-5);
+      padding-top: var(--space-3); padding-bottom: var(--space-3);
+    }
+    .demo-bar .brand img { height: 22px; }
+    .venue-tag { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+    .venue-tag strong { color: var(--text); font-weight: 600; }
+    .persona-switcher { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+    .persona-btn {
+      font-family: var(--mono); font-size: 0.74rem; font-weight: 500;
+      padding: 7px 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+      background: transparent; color: var(--muted); cursor: pointer;
+      transition: all var(--t-quick) var(--ease);
+    }
+    .persona-btn:hover { color: var(--text); border-color: var(--text); }
+    .persona-btn.active { background: var(--saffron); color: var(--ink); border-color: var(--saffron-deep); }
+    .persona-btn:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
+
+    /* Persona context line */
+    .persona-context {
+      padding: 10px var(--space-5); font-family: var(--mono); font-size: 0.78rem; color: var(--dim);
+      max-width: var(--wrap-wide); margin: 0 auto;
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex; gap: 24px; border-bottom: 1px solid var(--border);
+      padding: 0 var(--space-5); max-width: var(--wrap-wide); margin: 0 auto;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: transparent; border: none; cursor: pointer;
+      font-family: var(--body); font-size: 0.95rem; font-weight: 500;
+      color: var(--dim); padding: 14px 0; position: relative;
+      transition: color var(--t-quick) var(--ease);
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--text); }
+    .tab-btn.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--saffron);
+    }
+    .tab-btn:focus-visible { outline: 2px solid var(--saffron); outline-offset: 4px; border-radius: 2px; }
+
+    /* Panel */
+    .panel-wrap { padding: var(--space-7) var(--space-5); max-width: var(--wrap-wide); margin: 0 auto; }
+
+    /* Today */
+    .today-head { display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-between; align-items: baseline; margin-bottom: var(--space-5); }
+    .today-date { font-family: var(--display); font-weight: 700; font-size: 1.4rem; }
+    .today-meta { font-size: 0.78rem; letter-spacing: 0.12em; color: var(--dim); text-transform: uppercase; }
+
+    .briefing-card { border-left: 3px solid var(--saffron); }
+    .briefing-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .briefing-agent { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; color: var(--saffron-deep); text-transform: uppercase; }
+    .briefing-title { font-size: 1.4rem; margin-bottom: 16px; }
+    .briefing-bullets { list-style: none; padding: 0; }
+    .briefing-bullets li { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+    .briefing-bullets li:last-child { border-bottom: none; }
+    .briefing-num { width: 22px; flex-shrink: 0; font-size: 0.78rem; }
+    .briefing-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Suggestions */
+    .suggestions { margin-top: var(--space-5); display: flex; flex-direction: column; gap: 10px; }
+    .suggestion {
+      display: flex; align-items: center; gap: var(--space-4);
+      padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-2);
+      background: var(--surface);
+    }
+    .suggestion-body { flex: 1; font-size: 0.95rem; }
+    .suggestion .pill { flex-shrink: 0; }
+    @media (max-width: 720px) {
+      .suggestion { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Sourcing */
+    .sourcing { display: flex; flex-direction: column; gap: var(--space-6); }
+    .rep-card { margin-top: 18px; padding: 18px; background: var(--bg); border: 1px solid var(--brass); border-radius: 8px; }
+    .rep-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 24px; margin-bottom: 14px; }
+    .rep-grid > div { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
+    .rep-grid > div strong { color: var(--text); display: block; font-size: 1.15rem; font-family: var(--display); font-weight: 700; }
+    .rep-badge { display: inline-block; padding: 4px 10px; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); border: 1px solid var(--brass); border-radius: 4px; }
+    @media (min-width: 600px) { .rep-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .supplier-list { display: flex; flex-direction: column; gap: 8px; }
+    .supplier-row {
+      display: flex; align-items: center; gap: var(--space-4);
+      padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-2);
+    }
+    .supplier-name { flex: 1; display: flex; align-items: baseline; gap: 12px; }
+    .supplier-cat { font-size: 0.78rem; }
+    .supplier-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    @media (max-width: 600px) {
+      .supplier-row { flex-direction: column; align-items: flex-start; }
+      .supplier-name { flex-direction: column; gap: 2px; }
+    }
+
+    /* Insights / ROI Mirror */
+    .insights-head { margin-bottom: var(--space-6); }
+    .insights-head h2 { margin-top: 8px; font-size: 1.8rem; }
+    .insights-head p { margin-top: 8px; max-width: 580px; }
+    .savings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .saving-card { padding: 22px; }
+    .saving-num { font-weight: 800; font-size: 2.2rem; line-height: 1; letter-spacing: -0.015em; }
+    .saving-lbl { font-size: 0.7rem; letter-spacing: 0.14em; color: var(--dim); margin-top: 8px; }
+    .saving-desc { font-size: 0.88rem; margin-top: 6px; }
+
+    .total-tile {
+      margin-top: 18px;
+      border-left: 3px solid var(--olive); border-color: var(--olive);
+      display: flex; flex-wrap: wrap; gap: var(--space-4);
+      align-items: center; justify-content: space-between;
+      padding: 22px 26px;
+    }
+    .total-num { font-weight: 800; font-size: 2.2rem; color: var(--olive-deep); line-height: 1; }
+    .total-pct { font-size: 0.78rem; margin-top: 4px; }
+    .total-formula { font-size: 0.9rem; }
+
+    .spark-box { margin-top: 18px; padding: 22px; }
+    .sparkline { display: flex; align-items: flex-end; gap: 8px; height: 100px; margin-top: 12px; }
+    .spark-bar { flex: 1; background: linear-gradient(to top, var(--olive), var(--olive-deep)); border-radius: 3px 3px 0 0; min-height: 12px; }
+
+    .insights-cta { margin-top: var(--space-6); }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(11, 13, 14, 0.55);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: var(--space-5); z-index: 100;
+      animation: fade-in 200ms var(--ease);
+    }
+    @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+    .modal {
+      background: var(--bg); border: 1px solid var(--border-strong);
+      border-radius: var(--radius-3); padding: var(--space-6);
+      max-width: 640px; width: 100%; position: relative;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      cursor: pointer; font-size: 0.9rem; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { color: var(--text); border-color: var(--text); }
+    .modal-title { font-size: 1.4rem; margin: 8px 0 18px; }
+
+    .order-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 0.9rem; }
+    .order-table th, .order-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
+    .order-table th { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; color: var(--dim); text-transform: uppercase; font-weight: 500; }
+    .order-table .right { text-align: right; }
+
+    .order-totals { margin-top: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; }
+    .order-totals > div { display: flex; justify-content: space-between; padding: 4px 0; }
+    .order-total-row { padding-top: 12px !important; border-top: 1px solid var(--border-strong); margin-top: 4px; font-weight: 600; font-size: 1rem !important; }
+    .total-amount { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; color: var(--text); }
+
+    .modal-actions { margin-top: 20px; display: flex; gap: 10px; }
+    .modal-badge { margin-top: 16px; font-size: 0.7rem; letter-spacing: 0.12em; cursor: help; padding-top: 12px; border-top: 1px solid var(--border); }
+
+    /* Escrow animation */
+    .btn.escrowing { background: var(--saffron); color: var(--ink); border-color: var(--saffron-deep); animation: pulse 600ms var(--ease) infinite alternate; pointer-events: none; }
+    .btn.escrowed  { background: var(--olive); color: var(--bg); border-color: var(--olive-deep); pointer-events: none; }
+    @keyframes pulse {
+      from { box-shadow: 0 0 0 0 rgba(232, 163, 61, 0.5); }
+      to   { box-shadow: 0 0 0 8px rgba(232, 163, 61, 0); }
+    }
+    .escrow-status { margin-top: 12px; font-size: 0.85rem; color: var(--olive-deep); opacity: 0; transition: opacity 300ms var(--ease); }
+    .escrow-status.visible { opacity: 1; }
+
+    .placeholder { text-align: center; padding: var(--space-9) var(--space-5); }
+    .placeholder h2 { margin: 12px 0 8px; }
+  </style>
+</head>
+<body>
+  <a href="#panel" class="skip-link">Skip to panel</a>
+
+  <div class="demo-banner">DEMO MODE · NO LIVE DATA · NO LIVE PAYMENTS</div>
+
+  <header class="demo-bar" role="banner">
+    <div class="wrap-wide">
+      <a href="../" class="brand" aria-label="wAIter — back to landing"><img src="../assets/wordmark.svg" alt="wAIter"></a>
+      <div class="venue-tag mono"><strong>Stagione</strong> · Surry Hills</div>
+      <div id="persona-switcher" class="persona-switcher" role="group" aria-label="Persona switcher"></div>
+    </div>
+    <div id="persona-context" class="persona-context"></div>
+  </header>
+
+  <nav id="tab-bar" class="tab-bar" aria-label="Tabs"></nav>
+
+  <main id="panel" class="panel-wrap" tabindex="-1"></main>
+
+  <script src="data.js"></script>
+  <script src="scripts.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; frame-ancestors 'none'; worker-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="description" content="wAIter — partner review pass. The wait is over.">
+  <title>wAIter — deck · partner review pass</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext x='3' y='19' font-family='Georgia,serif' font-weight='800' font-size='20' fill='%230B0D0E'%3Ew%3Ctspan fill='%23E8A33D'%3EAI%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+  <style>
+    html, body { height: 100%; }
+    body { overflow-y: auto; scroll-snap-type: y mandatory; }
+    @media (prefers-reduced-motion: reduce) {
+      body { scroll-snap-type: none; }
+    }
+
+    .slide {
+      min-height: 100vh; min-height: 100dvh;
+      scroll-snap-align: start; scroll-snap-stop: always;
+      padding: clamp(48px, 8vh, 96px) var(--space-5);
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .slide-num {
+      position: absolute; top: 24px; left: 32px;
+      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.18em;
+      color: var(--dim); text-transform: uppercase;
+    }
+    .slide-content { max-width: 880px; margin: 0 auto; width: 100%; }
+
+    h1.slide-h { font-size: clamp(2.6rem, 6vw, 4.4rem); line-height: 1.02; margin: var(--space-4) 0 var(--space-5); }
+    h2.slide-h { font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.06; margin: var(--space-4) 0 var(--space-5); }
+    .slide p, .slide li { font-size: clamp(1.05rem, 1.8vw, 1.2rem); line-height: 1.65; color: var(--muted); }
+    .slide ul { list-style: none; padding-left: 0; margin-top: var(--space-5); }
+    .slide ul li { padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 14px; align-items: flex-start; }
+    .slide ul li:last-child { border-bottom: none; }
+    .slide ul li .dot { margin-top: 9px; }
+
+    .deck-bigstat { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 8vw, 5rem); line-height: 1; letter-spacing: -0.02em; color: var(--saffron-deep); }
+    .deck-bigstat-lbl { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.16em; color: var(--dim); text-transform: uppercase; margin-top: 8px; }
+
+    .three-up { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-5); margin-top: var(--space-6); }
+    .three-up .card h3 { margin-bottom: 8px; }
+    .three-up .card p { font-size: 0.95rem; }
+
+    .hero-shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); margin-top: var(--space-6); }
+    .hero-shot { border: 1px solid var(--border); border-radius: var(--radius-3); overflow: hidden; height: 320px; position: relative; }
+    .hero-shot iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .hero-shot-label { position: absolute; bottom: 0; left: 0; right: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); padding: 10px 14px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; color: var(--dim); text-transform: uppercase; border-top: 1px solid var(--border); }
+
+    .deck-nav {
+      position: fixed; bottom: 24px; right: 24px; z-index: 50;
+      display: flex; gap: 8px; padding: 10px 14px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border: 1px solid var(--border); border-radius: var(--radius-pill);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .deck-nav .mono { font-size: 0.74rem; color: var(--muted); }
+    .deck-nav a { color: var(--saffron-deep); font-weight: 600; }
+
+    .deck-home {
+      position: fixed; top: 24px; right: 24px; z-index: 50;
+      font-family: var(--mono); font-size: 0.74rem; color: var(--muted);
+      padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .deck-home:hover { color: var(--text); border-color: var(--text); }
+
+    .ask-grid { display: grid; gap: var(--space-4); margin-top: var(--space-5); }
+    .ask-row { padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-3); background: var(--surface); }
+    .ask-row strong { color: var(--text); }
+  </style>
+</head>
+<body>
+  <a href="../" class="deck-home" rel="prev">← back to landing</a>
+
+  <article>
+
+    <!-- 1. TITLE -->
+    <section class="slide" id="s-1">
+      <div class="slide-num">01 / 12 · TITLE</div>
+      <div class="slide-content">
+        <span class="eyebrow">PARTNER REVIEW PASS · APRIL 2026</span>
+        <h1 class="slide-h serif">wAIter.</h1>
+        <p style="font-family: var(--display); font-style: italic; font-size: clamp(1.3rem, 3vw, 1.8rem); color: var(--saffron-deep); margin-top: -8px;">The wait is over.</p>
+        <p style="margin-top: 32px; max-width: 560px;">AI-run operations, peer-to-peer supplier marketplace, and self-paying invoices for restaurants who already know what they're doing.</p>
+      </div>
+    </section>
+
+    <!-- 2. PROBLEM -->
+    <section class="slide" id="s-2">
+      <div class="slide-num">02 / 12 · THE PROBLEM</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE PROBLEM</span>
+        <h2 class="slide-h serif">Established hospo runs on duct-taped tools.</h2>
+        <ul>
+          <li><span class="dot dot-ember" aria-hidden="true"></span><span>Operators run 4–7 disconnected systems: POS, roster, inventory, bookings, accounting, supplier email.</span></li>
+          <li><span class="dot dot-ember" aria-hidden="true"></span><span><strong style="color: var(--text);">5–8% of margin</strong> bleeds out the gaps between them — invisible until you go looking for it.</span></li>
+          <li><span class="dot dot-ember" aria-hidden="true"></span><span>Operators have learned to live with it. Nobody calls it a problem because nobody can name it.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. INSIGHT -->
+    <section class="slide" id="s-3">
+      <div class="slide-num">03 / 12 · THE INSIGHT</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE INSIGHT</span>
+        <h2 class="slide-h serif">Incumbents won't switch. They'll add.</h2>
+        <p>The market is full of replacement plays — *new* POS, *new* roster app, *new* inventory tool. Each demands a forklift change, and most established operators say no.</p>
+        <p style="margin-top: 16px;">wAIter is the layer that runs <em>alongside</em> the existing stack first. Mirrors the data, surfaces what the tools hide, earns trust. Then absorbs categories one at a time, on the operator's clock — not ours.</p>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT -->
+    <section class="slide" id="s-4">
+      <div class="slide-num">04 / 12 · THE PRODUCT</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE PRODUCT</span>
+        <h2 class="slide-h serif">A single coordination panel.</h2>
+        <p>Persona-scoped: GM, Head Chef, FOH, Bar. Same data, different decisions. The AI Manager reads everything, surfaces what each role needs to act on, drafts the action.</p>
+        <div class="three-up">
+          <div class="card card-saffron"><h3>GM</h3><p class="muted">Service-level operations + multi-venue P&amp;L view.</p></div>
+          <div class="card card-olive"><h3>Head Chef</h3><p class="muted">Prep, stock, recipe costing, supplier ordering.</p></div>
+          <div class="card card-brass"><h3>FOH / Bar</h3><p class="muted">Bookings, covers, roster, pour cost, licensing.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. TRIFECTA -->
+    <section class="slide" id="s-5">
+      <div class="slide-num">05 / 12 · THE TRIFECTA</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE TRIFECTA</span>
+        <h2 class="slide-h serif">Three pieces nobody else has put together.</h2>
+        <div class="three-up">
+          <div class="card card-saffron">
+            <h3>AI Manager</h3>
+            <p class="muted">Persistent agent reading bookings, sales, roster, stock, supplier invoices. Tells you what's about to go wrong before it does.</p>
+          </div>
+          <div class="card card-olive">
+            <h3>Sourcing Marketplace</h3>
+            <p class="muted">Peer suppliers, portable reputation NFT, smart-contract settlement. No middleman taking a cut on the trade.</p>
+          </div>
+          <div class="card card-brass">
+            <h3>Self-paying invoices</h3>
+            <p class="muted">Approve. Funds escrow. Goods arrive. Smart contract releases. wAIter never touches your money.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. HERO SHOTS -->
+    <section class="slide" id="s-6">
+      <div class="slide-num">06 / 12 · HERO SHOTS</div>
+      <div class="slide-content">
+        <span class="eyebrow">HERO SHOTS</span>
+        <h2 class="slide-h serif">What the operator sees.</h2>
+        <div class="hero-shots">
+          <div class="hero-shot">
+            <iframe src="../assets/sample-screens/morning-briefing.html" title="Morning briefing" loading="lazy" sandbox="allow-same-origin"></iframe>
+            <div class="hero-shot-label">MORNING BRIEFING</div>
+          </div>
+          <div class="hero-shot">
+            <iframe src="../assets/sample-screens/marketplace.html" title="Marketplace cross-reference" loading="lazy" sandbox="allow-same-origin"></iframe>
+            <div class="hero-shot-label">MARKETPLACE CROSS-REF</div>
+          </div>
+          <div class="hero-shot">
+            <iframe src="../assets/sample-screens/roi-mirror.html" title="ROI Mirror" loading="lazy" sandbox="allow-same-origin"></iframe>
+            <div class="hero-shot-label">ROI MIRROR</div>
+          </div>
+        </div>
+        <p class="dim mono" style="margin-top: 14px; font-size: 0.78rem;">Click the demo at <a href="../demo/" style="color: var(--saffron-deep);">/demo</a> for the live persona-switcher version.</p>
+      </div>
+    </section>
+
+    <!-- 7. WHY NOW -->
+    <section class="slide" id="s-7">
+      <div class="slide-num">07 / 12 · WHY NOW</div>
+      <div class="slide-content">
+        <span class="eyebrow">WHY NOW</span>
+        <h2 class="slide-h serif">Three things lined up.</h2>
+        <ul>
+          <li><span class="dot dot-saffron" aria-hidden="true"></span><span><strong style="color: var(--text);">AUDD live</strong> — Novatti's AU-pegged stablecoin, ASX-listed issuer. Local rails for local trade.</span></li>
+          <li><span class="dot dot-saffron" aria-hidden="true"></span><span><strong style="color: var(--text);">Account abstraction (ERC-4337) production-ready</strong> on cheap L2s. Operators sign in with a passkey; never see a wallet.</span></li>
+          <li><span class="dot dot-saffron" aria-hidden="true"></span><span><strong style="color: var(--text);">Hospo is tired of legacy POS lock-in.</strong> The willingness curve is finally pointing the right way.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 8. WEDGE -->
+    <section class="slide" id="s-8">
+      <div class="slide-num">08 / 12 · THE WEDGE</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE WEDGE</span>
+        <h2 class="slide-h serif">AU 50-venue pilot.</h2>
+        <p>Italian · Chinese · Indian · Modern Australian. Established venues, $1M–$5M revenue, multi-tool pain.</p>
+        <ul style="margin-top: var(--space-5);">
+          <li><span class="dot dot-olive" aria-hidden="true"></span><span><strong style="color: var(--text);">5–10 seats</strong> from a curated 50-venue pool.</span></li>
+          <li><span class="dot dot-olive" aria-hidden="true"></span><span><strong style="color: var(--text);">2 months free</strong> — all software + API costs covered.</span></li>
+          <li><span class="dot dot-olive" aria-hidden="true"></span><span><strong style="color: var(--text);">Hardware appliance + 2 staff certifications</strong> included for the trial.</span></li>
+          <li><span class="dot dot-olive" aria-hidden="true"></span><span>If it doesn't earn more than it costs, we walk. No obligation.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 9. UNIT ECONOMICS -->
+    <section class="slide" id="s-9">
+      <div class="slide-num">09 / 12 · UNIT ECONOMICS</div>
+      <div class="slide-content">
+        <span class="eyebrow">UNIT ECONOMICS</span>
+        <h2 class="slide-h serif">Money in, money out.</h2>
+        <div class="three-up" style="margin-top: 32px;">
+          <div>
+            <div class="deck-bigstat">$6,478</div>
+            <div class="deck-bigstat-lbl">net to operator / month, by month 6 ($1.5M venue)</div>
+          </div>
+          <div>
+            <div class="deck-bigstat" style="color: var(--olive-deep);">$79–$199</div>
+            <div class="deck-bigstat-lbl">SaaS / venue / month + 0.25% on settled trade</div>
+          </div>
+          <div>
+            <div class="deck-bigstat" style="color: var(--brass);">$1.24M</div>
+            <div class="deck-bigstat-lbl">/yr operating margin advantage vs Stripe Connect at $50M GMV</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. MOAT -->
+    <section class="slide" id="s-10">
+      <div class="slide-num">10 / 12 · THE MOAT</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE MOAT</span>
+        <h2 class="slide-h serif">Three things that compound.</h2>
+        <ul>
+          <li><span class="dot dot-saffron" aria-hidden="true"></span><span><strong style="color: var(--text);">AI grounded in live ops data</strong> — every venue makes the model better, every model decision earns more trust.</span></li>
+          <li><span class="dot dot-olive" aria-hidden="true"></span><span><strong style="color: var(--text);">Portable supplier reputation</strong> (soulbound NFT) — suppliers carry their record between platforms; switching cost compounds.</span></li>
+          <li><span class="dot dot-brass" aria-hidden="true"></span><span><strong style="color: var(--text);">Hardware + training onboarding</strong> — once our kit is on the pass and three staff are certified, the operator doesn't churn.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 11. GTM -->
+    <section class="slide" id="s-11">
+      <div class="slide-num">11 / 12 · GTM</div>
+      <div class="slide-content">
+        <span class="eyebrow">GTM PHASES</span>
+        <h2 class="slide-h serif">Closed alpha → Public.</h2>
+        <ul>
+          <li><span class="dot dot-saffron" aria-hidden="true"></span><span><strong style="color: var(--text);">Closed alpha</strong> · 5–10 AU venues, single-venue ops, AI Manager only</span></li>
+          <li><span class="dot dot-saffron" aria-hidden="true"></span><span><strong style="color: var(--text);">Paid beta</strong> · open the marketplace among the alpha cohort, smart-contract settlement live</span></li>
+          <li><span class="dot dot-olive" aria-hidden="true"></span><span><strong style="color: var(--text);">Public launch</strong> · self-serve onboarding, hardware bundle, paid training</span></li>
+          <li><span class="dot dot-brass" aria-hidden="true"></span><span><strong style="color: var(--text);">Cross-venue trade</strong> · group-buy contracts, portable reputation, full P2P graph</span></li>
+        </ul>
+        <p class="dim mono" style="margin-top: 24px; font-size: 0.85rem;">AU first. NZ + UK after.</p>
+      </div>
+    </section>
+
+    <!-- 12. ASK -->
+    <section class="slide" id="s-12">
+      <div class="slide-num">12 / 12 · THE ASK</div>
+      <div class="slide-content">
+        <span class="eyebrow">THE ASK</span>
+        <h2 class="slide-h serif">Fund the wedge.</h2>
+        <div class="ask-grid">
+          <div class="ask-row"><strong>Cover the AU 50-pilot fronting costs.</strong> Software, API, hardware, training. ~2 months runway for the pilot cohort.</div>
+          <div class="ask-row"><strong>Eat margin until volume justifies the take rate.</strong> 0.25% protocol fee scales — but only with GMV.</div>
+          <div class="ask-row"><strong>Then scale.</strong> AU first; NZ and UK after the playbook is proven.</div>
+        </div>
+        <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a class="btn btn-primary" href="../">Back to landing</a>
+          <a class="btn btn-ghost" href="../demo/">Open the demo</a>
+        </div>
+      </div>
+    </section>
+
+  </article>
+
+  <nav class="deck-nav" aria-label="Deck nav">
+    <span class="mono">12 slides</span>
+    <span class="mono dim">·</span>
+    <a class="mono" href="#s-1">↑ top</a>
+  </nav>
+</body>
+</html>
