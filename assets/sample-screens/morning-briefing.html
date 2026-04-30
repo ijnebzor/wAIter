@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'none'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>wAIter — Morning Briefing</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 32px; }
+  .frame { max-width: 720px; margin: 0 auto; }
+  .briefing { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--saffron); border-radius: 10px; padding: 28px; }
+  .briefing-head { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .briefing-head .agent { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; color: var(--saffron-deep); text-transform: uppercase; }
+  .briefing h2 { font-size: 1.45rem; margin-bottom: 16px; }
+  .bullets { list-style: none; }
+  .bullets li { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+  .bullets li:last-child { border-bottom: none; }
+  .bullets .num { font-family: var(--mono); color: var(--dim); width: 22px; flex-shrink: 0; }
+  .actions { margin-top: 20px; display: flex; gap: 10px; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="briefing">
+    <div class="briefing-head">
+      <span class="dot dot-saffron" aria-hidden="true"></span>
+      <span class="agent">AI MANAGER · 06:14</span>
+    </div>
+    <h2 class="serif">Morning briefing — 4 things to know before service</h2>
+    <ol class="bullets">
+      <li><span class="num">01</span><span>Friday's bookings up <strong>22% w/w</strong>. Saturday at 142 confirmed (vs avg 124).</span></li>
+      <li><span class="num">02</span><span><strong>Chicken thigh short by 12kg</strong> for projected covers. Order draft below.</span></li>
+      <li><span class="num">03</span><span>House pinot 4 bottles short. Lonely Vines order draft below.</span></li>
+      <li><span class="num">04</span><span><strong>Roster gap</strong> — Thursday certified-supervisor coverage. 1 conflict to resolve.</span></li>
+    </ol>
+    <div class="actions">
+      <button class="btn btn-primary" type="button">Review draft order →</button>
+      <button class="btn btn-ghost" type="button">Dismiss</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
