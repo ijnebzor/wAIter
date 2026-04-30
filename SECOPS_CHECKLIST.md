@@ -111,8 +111,8 @@ Maps to: OWASP A02:2021 · NIST PR.DS-01 · ISO A.5.10 / A.8.10
 |---|---|---|---|
 | 0.3.1 | LICENSE present | File exists, valid OSI-approved or explicit "All rights reserved" with intent | ISO A.5.32 |
 | 0.3.2 | README placeholder present | Describes project at a level safe for public; no internal codenames/strategy | NIST GV.PO |
-| 0.3.3 | No personal/internal URLs, IPs, paths | Grep for `192.168.`, `10.0.`, internal hostnames, and **absolute paths**: `/Users/ijneb/` (this machine's home dir — exact), `/Users/[a-zA-Z0-9_-]+/`, `/home/[a-z]+/`, `C:\\\\Users\\\\` in tracked content | ISO A.5.14 · CWE-540 |
-| 0.3.4 | No partner/client PII | No emails, phone numbers, real names of Antoine/Kaavya beyond what BRIEF authorizes | ISO A.5.34 (Privacy) · NIST GV.OC |
+| 0.3.3 | No personal/internal URLs, IPs, paths | Grep for `192.168.`, `10.0.`, internal hostnames, and **absolute home-directory paths**: `/Users/[a-zA-Z0-9_-]+/`, `/home/[a-z]+/`, `C:\\\\Users\\\\` in tracked content (machine-specific home directory must not appear) | ISO A.5.14 · CWE-540 |
+| 0.3.4 | No partner/client PII | No emails, phone numbers, or real names of partner first names referenced in BRIEF beyond what BRIEF authorizes | ISO A.5.34 (Privacy) · NIST GV.OC |
 | 0.3.5 | Default branch is `main`, not `master` | `git symbolic-ref HEAD` → `refs/heads/main` | Repo posture |
 | 0.3.6 | Repo description / topics on GitHub do not leak strategy | Manual: visit GH settings, confirm | NIST GV.OC |
 | 0.3.7 | GH Pages source set safely | `main` branch / `/` (or `/docs`) — confirmed before flip-public | OWASP A05:2021 |
@@ -262,7 +262,7 @@ Maps to: OWASP A02:2021 (Crypto Failures) · NIST PR.DS-02 · ISO A.8.24
 
 ### 3.2 — Final secrets & strategy sweep (HARD GATE) — Trevor lead (secrets) / Jaycee lead (strategy/PII)
 - Re-run all 0.1 checks against final tree.
-- Re-run public-repo-readiness (0.3) — particularly that copy doesn't leak Antoine/Kaavya beyond what BRIEF authorizes.
+- Re-run public-repo-readiness (0.3) — particularly that copy doesn't leak partner first names referenced in BRIEF beyond what BRIEF authorizes.
 
 ### 3.3 — Final accessibility sweep (HARD GATE) — Jaycee lead
 - Run axe / Lighthouse Accessibility ≥ 95 on `index.html`, `demo/index.html`, `deck/index.html`.

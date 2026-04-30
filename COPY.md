@@ -104,8 +104,7 @@
 
 ### Footer
 - Wordmark + tagline
-- `© 2026 wAIter · Surry Hills, Sydney`
-- `Contact: open an issue on GitHub`
+- `© 2026 wAIter · Surry Hills, Sydney · hello@waiter.app`
 - Links: privacy · terms · github (greyed out, "soon")
 
 ---
