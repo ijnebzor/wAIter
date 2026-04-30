@@ -78,4 +78,33 @@ This file exists so that SecOps audits in later phases can distinguish:
 
 ---
 
+## D4 — `'unsafe-inline'` on `style-src` for landing/demo/deck
+
+**Status**: Deferred · accepted by SecOps (Jaycee + Trevor co-signed via `phase-2-polish` audit)
+**Accepted on**: 2026-04-30
+**Source**: SECOPS_CHECKLIST.md § 2.2 — H2 (Jaycee) and F-T7 (Trevor) Phase 2 retro-audit findings
+
+**Risk**: `index.html`, `demo/index.html`, and `deck/index.html` ship `style-src 'self' 'unsafe-inline'` to permit ~53 inline `style=` attributes on the landing, an inline `<style>` block in the demo (~188 LOC) and the deck (~65 LOC), and 24 inline `style=` attributes on the deck. `'unsafe-inline'` widens the style-injection attack surface — any future change that interpolates user-derived data into a `style` attribute becomes exploitable as a layout-level XSS / data-exfiltration vector.
+
+**Mitigation in place**:
+- **`script-src 'self'` (no `'unsafe-inline'`)** on every page — the higher-risk direction stays clean. Style-injection cannot pivot to JS execution via this carve-out.
+- **No user-derived data flows into any `style` attribute today.** Verified by SecOps: the inline styles are layout/spacing/colour constants, not interpolated content. The carve-out is theoretical attack-surface, not exploitable.
+- **Sample-screens migrated to strict `style-src 'self'`** in this same patch (mock-page namespace in `assets/styles.css`) — the pattern is proven; deferring landing/demo/deck migration is purely a scope choice for today's ship, not a capability gap.
+- **`script-src 'self'`, `connect-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, `base-uri 'self'`, `form-action 'self'` all remain strict** — exfiltration paths blocked.
+
+**Frameworks impacted**:
+- OWASP A05:2021 (Security Misconfiguration), A03:2021 (Injection — theoretical)
+- NIST CSF v2 PR.IR · ISO 27001 A.8.9
+
+**Revisit at**: Phase 4 (post-launch hardening). Migrate inline styles → utility/component classes in `assets/styles.css` (or new `assets/components.css`), externalise `<style>` blocks, restore `style-src 'self'` (no `'unsafe-inline'`) on all three pages. Sample-screens already prove the migration shape.
+
+**Action items for Phase 4**:
+1. Author `assets/components.css` (or extend `assets/styles.css`) with classes covering landing's hero/problem/trifecta/roi/pilot/footer layout, demo's frame chrome, deck's slide/grid/stat layout.
+2. Replace each inline `style=` attribute with a class reference (mechanical).
+3. Externalise demo + deck `<style>` blocks into the same stylesheet.
+4. Drop `'unsafe-inline'` from each page's `style-src`.
+5. Verify live render on Pages, run an axe/Lighthouse pass.
+
+---
+
 *Maintained by Kailee. Add deferred items here whenever a SecOps finding is consciously not-fixed-now with founder/SecOps authority. Each entry must name the source of authority and a revisit phase.*

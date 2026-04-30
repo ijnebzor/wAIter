@@ -41,7 +41,7 @@ Verified contrast ratios against `--paper` (#FAF7F1). On light backgrounds, only
 |---|---|---|---|---|
 | `--text` `--ink` `--char` `--graphite` | ≥12.9:1 | ✅ | ✅ | text + UI + surface |
 | `--muted`    | 6.49:1   | ✅ | ✅ | secondary text |
-| `--dim`      | 4.61:1   | ✅ | ✅ | tertiary text, labels, eyebrows |
+| `--dim`      | 5.02:1 (4.61:1 on bone surface) | ✅ | ✅ | tertiary text, labels, eyebrows |
 | `--ember`    | 4.56:1   | ✅ | ✅ | text + UI (focus ring) + fill |
 | `--olive-deep` | 4.29:1 | ❌ | ✅ | large text / UI only — **not body text on light** |
 | `--saffron-deep` | 2.85:1 | ❌ | ❌ | surface / border only — **not text on light** |

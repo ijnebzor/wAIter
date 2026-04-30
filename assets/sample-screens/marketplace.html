@@ -3,30 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'none'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'none'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <title>wAIter — Marketplace cross-reference</title>
 <link rel="stylesheet" href="../styles.css">
-<style>
-  body { padding: 32px; }
-  .frame { max-width: 720px; margin: 0 auto; }
-  .xref { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--saffron); border-radius: 10px; padding: 28px; }
-  .xref-head { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; color: var(--dim); text-transform: uppercase; margin-bottom: 12px; }
-  .xref h2 { font-size: 1.35rem; margin-bottom: 14px; }
-  .rep-card { margin-top: 18px; padding: 18px; background: var(--bg); border: 1px solid var(--brass); border-radius: 8px; }
-  .rep-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 24px; margin-top: 12px; }
-  .rep-grid div { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
-  .rep-grid div strong { color: var(--text); display: block; font-size: 1.1rem; font-family: var(--display); }
-  .rep-badge { display: inline-block; margin-top: 14px; padding: 4px 10px; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); border: 1px solid var(--brass); border-radius: 4px; }
-  .actions { margin-top: 20px; display: flex; gap: 10px; }
-</style>
 </head>
-<body>
+<body class="mock-page">
+<h1 class="sr-only">wAIter — Marketplace cross-reference sample screen</h1>
 <div class="frame">
-  <div class="xref">
-    <div class="xref-head">AI Manager · cross-reference</div>
+  <article class="mock-screen mock-xref" data-mock="marketplace-cross-ref">
+    <div class="head">AI Manager · cross-reference</div>
     <h2 class="serif">Mt Pleasant is 14% above market this week.</h2>
-    <p class="muted"><strong style="color: var(--text);">Hudson Valley Farms</strong> — verified by 8 venues you trust, $0.40/kg cheaper. Reputation NFT (soulbound, portable across platforms). Want to try a $200 trial order? Smart contract handles dispute if it's not up to spec.</p>
+    <p class="muted"><strong class="accent">Hudson Valley Farms</strong> — verified by 8 venues you trust, $0.40/kg cheaper. Reputation NFT (soulbound, portable across platforms). Want to try a $200 trial order? Smart contract handles dispute if it's not up to spec.</p>
     <div class="rep-card">
       <div class="rep-grid">
         <div><strong>4.8 ★</strong>reputation</div>
@@ -40,7 +28,7 @@
       <button class="btn btn-primary" type="button">Trial $200 order →</button>
       <button class="btn btn-ghost" type="button">Stay with Mt Pleasant</button>
     </div>
-  </div>
+  </article>
 </div>
 </body>
 </html>

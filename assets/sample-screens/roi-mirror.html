@@ -3,64 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'none'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'none'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <title>wAIter — ROI Mirror</title>
 <link rel="stylesheet" href="../styles.css">
-<style>
-  body { padding: 32px; }
-  .frame { max-width: 720px; margin: 0 auto; }
-  .mirror-head { margin-bottom: 24px; }
-  .mirror-head .eyebrow { display: block; margin-bottom: 8px; }
-  .mirror-head h2 { font-size: 1.55rem; }
-  .mirror-head .sub { color: var(--muted); margin-top: 8px; }
-  .savings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .saving-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
-  .saving-card .num { font-family: var(--display); font-weight: 800; font-size: 1.8rem; line-height: 1; }
-  .saving-card .lbl { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-top: 8px; }
-  .saving-card .desc { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
-  .total-tile { margin-top: 18px; background: var(--surface); border: 1px solid var(--olive); border-left: 3px solid var(--olive); border-radius: 10px; padding: 22px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px; justify-content: space-between; }
-  .total-tile .big { font-family: var(--display); font-weight: 800; font-size: 2.2rem; color: var(--olive-deep); line-height: 1; }
-  .total-tile .formula { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
-  .total-tile .pct { font-family: var(--mono); font-size: 0.75rem; color: var(--dim); margin-top: 4px; display: block; }
-  .cta { margin-top: 22px; }
-  @media (max-width: 600px) { .savings { grid-template-columns: 1fr; } .saving-card .num { font-size: 1.5rem; } }
-</style>
 </head>
-<body>
+<body class="mock-page">
+<h1 class="sr-only">wAIter — ROI Mirror sample screen</h1>
 <div class="frame">
-  <div class="mirror-head">
-    <span class="eyebrow">INSIGHTS · LAST 30 DAYS</span>
-    <h2 class="serif">What wAIter would have saved you.</h2>
-    <p class="sub">Read-only mirror — we're watching what your stack already produces. Imagine if you'd acted on it.</p>
-  </div>
-  <div class="savings">
-    <div class="saving-card">
-      <div class="num">$4,217</div>
-      <div class="lbl">Stock waste</div>
-      <div class="desc">Better par levels + supplier alerts</div>
+  <article class="mock-screen mock-mirror" data-mock="roi-mirror">
+    <div class="head">
+      <span class="eyebrow">INSIGHTS · LAST 30 DAYS</span>
+      <h2 class="serif">What wAIter would have saved you.</h2>
+      <p class="sub">Read-only mirror — we're watching what your stack already produces. Imagine if you'd acted on it.</p>
     </div>
-    <div class="saving-card">
-      <div class="num">$1,840</div>
-      <div class="lbl">Labour optimised</div>
-      <div class="desc">Roster gaps closed before peak</div>
+    <div class="savings">
+      <div class="saving-card">
+        <div class="num">$4,217</div>
+        <div class="lbl">Stock waste</div>
+        <div class="desc">Better par levels + supplier alerts</div>
+      </div>
+      <div class="saving-card">
+        <div class="num">$1,840</div>
+        <div class="lbl">Labour optimised</div>
+        <div class="desc">Roster gaps closed before peak</div>
+      </div>
+      <div class="saving-card">
+        <div class="num">$620</div>
+        <div class="lbl">Subscriptions</div>
+        <div class="desc">3 tools you don't need anymore</div>
+      </div>
     </div>
-    <div class="saving-card">
-      <div class="num">$620</div>
-      <div class="lbl">Subscriptions</div>
-      <div class="desc">3 tools you don't need anymore</div>
+    <div class="total-tile">
+      <div>
+        <div class="big">$6,478 net</div>
+        <span class="pct">= 4.3% of monthly revenue, recovered.</span>
+      </div>
+      <div class="formula">$6,677 saved&nbsp;&nbsp;−&nbsp;&nbsp;$199 wAIter cost</div>
     </div>
-  </div>
-  <div class="total-tile">
-    <div>
-      <div class="big">$6,478 net</div>
-      <span class="pct">= 4.3% of monthly revenue, recovered.</span>
+    <div class="cta">
+      <button class="btn btn-primary" type="button">Start your pilot — free for 2 months</button>
     </div>
-    <div class="formula">$6,677 saved&nbsp;&nbsp;−&nbsp;&nbsp;$199 wAIter cost</div>
-  </div>
-  <div class="cta">
-    <button class="btn btn-primary" type="button">Start your pilot — free for 2 months</button>
-  </div>
+  </article>
 </div>
 </body>
 </html>

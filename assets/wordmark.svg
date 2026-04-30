@@ -5,5 +5,5 @@
         font-weight="800"
         font-size="48"
         letter-spacing="-1"
-        fill="currentColor">w<tspan fill="#E8A33D">AI</tspan>ter</text>
+        fill="currentColor">w<tspan style="fill: var(--saffron, #E8A33D);">AI</tspan>ter</text>
 </svg>
