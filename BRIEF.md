@@ -236,7 +236,9 @@ Multiply: `revenue × multiplier × number_of_venues`. Use midpoint for headline
 - **Covers / week**: ~620 average
 - **Staff headcount**: 18 (12 FOH, 6 BOH)
 
-### Personas (real names for the demo)
+### Personas (named, fictional)
+
+Stagione is a fictional demo venue. All personas below are fictional characters. Any resemblance to real people is coincidental.
 - **GM**: James Holcombe
 - **Head Chef**: Yuki Andersson
 - **FOH Manager**: Maria Cervantes
