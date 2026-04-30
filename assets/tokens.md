@@ -27,9 +27,31 @@ Quick lookup for builders. Authoritative source: `assets/styles.css`.
 --olive         #8FA055   SUCCESS — paid, on-track, complete
 --olive-deep    #6B7C3C   hover / active state for olive
 --brass         #C9A86A   PREMIUM — pro tier, contracts, NFT badges
+
+--focus         var(--ember)   FOCUS RING — used by :focus-visible globally
 ```
 
 Light theme is default. Dark theme auto-applies via `prefers-color-scheme: dark`.
+
+### Text-safety on light surfaces (WCAG 2.2 AA)
+
+Verified contrast ratios against `--paper` (#FAF7F1). On light backgrounds, only some accents are safe as **text**; the rest are **surface / border / fill only**.
+
+| Token        | On paper | Body text (4.5:1) | Large/UI (3:1) | Use as |
+|---|---|---|---|---|
+| `--text` `--ink` `--char` `--graphite` | ≥12.9:1 | ✅ | ✅ | text + UI + surface |
+| `--muted`    | 6.49:1   | ✅ | ✅ | secondary text |
+| `--dim`      | 4.61:1   | ✅ | ✅ | tertiary text, labels, eyebrows |
+| `--ember`    | 4.56:1   | ✅ | ✅ | text + UI (focus ring) + fill |
+| `--olive-deep` | 4.29:1 | ❌ | ✅ | large text / UI only — **not body text on light** |
+| `--saffron-deep` | 2.85:1 | ❌ | ❌ | surface / border only — **not text on light** |
+| `--brass`    | 2.11:1   | ❌ | ❌ | surface / border / decorative — **not text on light** |
+| `--saffron`  | 2.02:1   | ❌ | ❌ | fill / border / dot only — **not text on light** |
+| `--olive`    | 2.68:1   | ❌ | ❌ | fill / border only — **not text on light** |
+
+**On dark surfaces** (against `--ink`), all named accents pass body-text contrast: saffron 9.03:1, brass 8.62:1, olive 6.80:1, ember 3.99:1 (UI-only on dark — passes 3:1 but not 4.5:1, so fine for focus-ring/borders/icons but not body text).
+
+When you need a text-coloured pill/callout on light, use `var(--text)` and let the border carry the brand colour — that's the pattern in `.pill-saffron / .pill-olive / .pill-brass`.
 
 ## Type
 

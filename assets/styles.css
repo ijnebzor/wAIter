@@ -79,7 +79,7 @@
   /* Type — light theme (default) */
   --text:       #14161A;
   --muted:      #5A5A55;
-  --dim:        #8A8A82;
+  --dim:        #717168;
   --bg:         var(--paper);
   --surface:    var(--bone);
   --border:     rgba(20, 22, 26, 0.10);
@@ -92,6 +92,9 @@
   --olive:      #8FA055;
   --olive-deep: #6B7C3C;
   --brass:      #C9A86A;
+
+  /* Focus indicator — ember (4.56:1 on paper, 3.99:1 on ink), passes WCAG 1.4.11. */
+  --focus:      var(--ember);
 
   /* Type stacks */
   --display: 'Fraunces', Georgia, 'Times New Roman', serif;
@@ -131,7 +134,7 @@
   :root {
     --text:       #ECE6DA;
     --muted:      #A29C90;
-    --dim:        #6F6A60;
+    --dim:        #807B6E;
     --bg:         var(--ink);
     --surface:    var(--char);
     --border:     rgba(242, 237, 228, 0.10);
@@ -253,7 +256,7 @@ section.section:last-of-type { border-bottom: none; }
   color: var(--bg);
 }
 .btn:hover { transform: translateY(-1px); }
-.btn:focus-visible { outline: 2px solid var(--saffron); outline-offset: 3px; }
+.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
 .btn-primary { background: var(--saffron); color: var(--ink); border-color: var(--saffron-deep); }
 .btn-primary:hover { background: var(--saffron-deep); color: var(--ink); }
@@ -280,10 +283,11 @@ section.section:last-of-type { border-bottom: none; }
   color: var(--muted);
   background: transparent;
 }
-.pill-saffron { border-color: var(--saffron); color: var(--saffron-deep); }
-.pill-olive   { border-color: var(--olive); color: var(--olive-deep); }
-.pill-ember   { border-color: var(--ember); color: var(--ember); }
-.pill-brass   { border-color: var(--brass); color: var(--brass); }
+/* Pill text: saffron / brass / olive are surface-only on light, so pill text is var(--text) and the brand colour is carried by the border. ember is text-safe (4.56:1) so .pill-ember keeps ember text. */
+.pill-saffron { border-color: var(--saffron);      color: var(--text); }
+.pill-olive   { border-color: var(--olive);        color: var(--text); }
+.pill-ember   { border-color: var(--ember);        color: var(--ember); }
+.pill-brass   { border-color: var(--brass);        color: var(--text); }
 
 .dot {
   display: inline-block;
@@ -342,8 +346,8 @@ section.section:last-of-type { border-bottom: none; }
 }
 .input:focus, .select:focus {
   outline: none;
-  border-color: var(--saffron);
-  box-shadow: 0 0 0 3px rgba(232, 163, 61, 0.18);
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(194, 74, 42, 0.22);
 }
 
 .range {
@@ -375,7 +379,7 @@ section.section:last-of-type { border-bottom: none; }
   box-shadow: 0 0 0 1px var(--saffron-deep);
   cursor: pointer;
 }
-.range:focus-visible { box-shadow: 0 0 0 3px rgba(232, 163, 61, 0.18); }
+.range:focus-visible { box-shadow: 0 0 0 3px rgba(194, 74, 42, 0.22); }
 
 .label {
   display: block;
@@ -433,7 +437,7 @@ section.section:last-of-type { border-bottom: none; }
   color: var(--dim);
   transition: color var(--t-quick) var(--ease);
 }
-.site-nav a:hover, .site-nav a:focus-visible { color: var(--saffron); }
+.site-nav a:hover, .site-nav a:focus-visible { color: var(--focus); }
 
 @media (max-width: 720px) {
   .site-nav .nav-links { display: none; }
@@ -494,7 +498,7 @@ section.section:last-of-type { border-bottom: none; }
 
 /* ---------- A11y ---------- */
 
-:focus-visible { outline: 2px solid var(--saffron); outline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
