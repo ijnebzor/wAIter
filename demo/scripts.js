@@ -12,17 +12,31 @@
   const $ = function (sel, root) { return (root || document).querySelector(sel); };
   const $$ = function (sel, root) { return Array.from((root || document).querySelectorAll(sel)); };
 
-  // ---------- Element factory (textContent only) ----------
+  // ---------- Element factory (textContent only, attribute whitelist) ----------
+  // Defence-in-depth (S9): page CSP already forbids inline event handlers
+  // (script-src 'self', no 'unsafe-inline'), but the factory also rejects any
+  // attribute key not on this list — notably all 'on*' handlers and 'style'.
+  // Future callers cannot accidentally route handler strings or inline styles
+  // through el(). Use direct property access (.addEventListener, .style.foo)
+  // when those are genuinely needed.
+  const SAFE_ATTRS = new Set([
+    'type', 'role', 'href', 'src', 'alt', 'title',
+    'disabled', 'value', 'name', 'id', 'checked', 'selected',
+    'placeholder', 'tabindex', 'rel', 'target', 'for', 'autocomplete'
+  ]);
   function el(tag, attrs, kids) {
     const node = document.createElement(tag);
     if (attrs) {
       Object.keys(attrs).forEach(function (k) {
-        if (k === 'class') node.className = attrs[k];
-        else if (k === 'text') node.textContent = attrs[k];
+        if (k === 'class')              node.className = attrs[k];
+        else if (k === 'text')          node.textContent = attrs[k];
         else if (k.startsWith('data-')) node.setAttribute(k, attrs[k]);
-        else if (k === 'aria-label') node.setAttribute(k, attrs[k]);
-        else if (k in node) node[k] = attrs[k];
-        else node.setAttribute(k, attrs[k]);
+        else if (k.startsWith('aria-')) node.setAttribute(k, attrs[k]);
+        else if (SAFE_ATTRS.has(k)) {
+          if (k in node) node[k] = attrs[k];
+          else node.setAttribute(k, attrs[k]);
+        }
+        // else: silently rejected.
       });
     }
     if (kids) {
@@ -302,21 +316,43 @@
   }
 
   // ---------- Modal: Order draft (Flow 1) ----------
+  // Focus management (S6, WCAG 2.1.2 No Keyboard Trap, 2.4.3 Focus Order,
+  // 2.4.11 Focus Not Obscured Min):
+  //   - opener saved before open; focus restored to it on close
+  //   - Tab / Shift-Tab cycle within modal — focus cannot escape behind overlay
+  //   - ESC closes
   function openOrderModal() {
+    const opener = document.activeElement;
     const draft = D.orderDraft;
     const overlay = el('div', { class: 'modal-overlay', role: 'presentation' });
     const modal = el('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Order draft' });
     const close = el('button', { class: 'modal-close', type: 'button', 'aria-label': 'Close' }, '✕');
     close.addEventListener('click', closeModal);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', escClose);
+    document.addEventListener('keydown', onKeydown);
 
     function closeModal() {
-      document.removeEventListener('keydown', escClose);
+      document.removeEventListener('keydown', onKeydown);
       overlay.remove();
       document.body.style.overflow = '';
+      if (opener && typeof opener.focus === 'function') opener.focus();
     }
-    function escClose(e) { if (e.key === 'Escape') closeModal(); }
+    function onKeydown(e) {
+      if (e.key === 'Escape') { closeModal(); return; }
+      if (e.key !== 'Tab') return;
+      const focusables = modal.querySelectorAll(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+      );
+      if (focusables.length === 0) { e.preventDefault(); return; }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !modal.contains(active))) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && (active === last || !modal.contains(active))) {
+        e.preventDefault(); first.focus();
+      }
+    }
 
     modal.appendChild(close);
     modal.appendChild(el('div', { class: 'eyebrow' }, 'ORDER DRAFT'));
@@ -355,7 +391,7 @@
     });
     modal.appendChild(el('div', { class: 'modal-actions' }, [
       approveBtn,
-      el('button', { class: 'btn btn-ghost', type: 'button', onclick: null }, 'Edit')
+      el('button', { class: 'btn btn-ghost', type: 'button' }, 'Edit')
     ]));
     modal.appendChild(el('div', { class: 'mono dim modal-badge', title: 'You and your supplier are paying each other directly. wAIter never touches the money.' }, draft.badge));
 
